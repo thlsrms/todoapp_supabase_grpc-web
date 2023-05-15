@@ -1,0 +1,3 @@
+[submodule "todo-server/supabase-rust"]
+	path = todo-server/supabase-rust
+	url = https://github.com/thlsrms/supabase-rust_fork

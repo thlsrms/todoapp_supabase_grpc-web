@@ -1,0 +1,4 @@
+version: v1
+directories:
+  - ./todo_api
+  - ./auth_api

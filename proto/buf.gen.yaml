@@ -1,0 +1,7 @@
+version: v1
+plugins:
+  - plugin: ts
+    path: ../todo-client/node_modules/.bin/protoc-gen-ts
+    out: ../todo-client/src/api/generated
+    opt:
+      - optimize_code_size

@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package auth.v1;
+
+service Authentication {
+  rpc SigninPassword (SigninPasswordRequest) returns (SigninPasswordResponse);
+  rpc SignupEmailPassword (SignupEmailPasswordRequest) returns (SignupEmailPasswordResponse);
+  rpc Logout (LogoutRequest) returns (LogoutResponse);
+}
+
+message Credentials {
+  string email = 1;
+  string password = 2;
+}
+
+message UserToken {
+  string value = 1;
+}
+
+message SigninPasswordRequest {
+  bytes credentials = 1; // Credentials message encoded
+}
+
+message SigninPasswordResponse {
+  UserToken token = 1;
+}
+
+message SignupEmailPasswordRequest {
+  bytes credentials = 1; // Credentials message encoded
+}
+message SignupEmailPasswordResponse {
+  UserToken token = 1;
+}
+
+message LogoutRequest {}
+message LogoutResponse {}

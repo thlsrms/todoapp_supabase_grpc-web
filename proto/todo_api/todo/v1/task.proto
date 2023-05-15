@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package todo.v1;
+
+message Task {
+  uint32 id = 1;
+  string author_id = 2;
+  string title = 3;
+  bool completed = 4;
+  optional string description = 5;
+}
+
+message Tasks {
+  repeated Task tasks = 1;
+}
