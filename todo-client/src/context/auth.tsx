@@ -13,7 +13,11 @@ export function AuthContextProvider(props: Props): JSX.Element {
   const [auth, setAuthApi] = createSignal(new Auth_v1());
 
   const setAuth = (userToken?: UserToken) => {
-    setAuthApi(new Auth_v1(userToken));
+    if (userToken !== undefined) {
+      setAuthApi(new Auth_v1(userToken));
+    } else {
+      setAuthApi(new Auth_v1());
+    }
   }
 
   return (

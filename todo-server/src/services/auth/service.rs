@@ -1,7 +1,8 @@
 use super::proto::auth::v1::{
     authentication_server::{Authentication, AuthenticationServer},
-    Credentials, LogoutRequest, LogoutResponse, SigninPasswordRequest, SigninPasswordResponse,
-    SignupEmailPasswordRequest, SignupEmailPasswordResponse, UserToken,
+    Credentials, LogoutRequest, LogoutResponse, SigninEmailPasswordRequest,
+    SigninEmailPasswordResponse, SignupEmailPasswordRequest, SignupEmailPasswordResponse,
+    UserToken,
 };
 use crate::{config::Config, supabase_wrapper::utils::parse_response};
 use crate::{services::grpc_status, supabase_wrapper::response_types::AccessToken};
@@ -16,10 +17,10 @@ pub struct AuthenticationService {
 
 #[tonic::async_trait]
 impl Authentication for AuthenticationService {
-    async fn signin_password(
+    async fn signin_email_password(
         &self,
-        request: Request<SigninPasswordRequest>,
-    ) -> Result<Response<SigninPasswordResponse>, Status> {
+        request: Request<SigninEmailPasswordRequest>,
+    ) -> Result<Response<SigninEmailPasswordResponse>, Status> {
         let credentials = match Credentials::decode(Bytes::from(request.into_inner().credentials)) {
             Ok(c) => c,
             Err(err) => {
@@ -44,7 +45,7 @@ impl Authentication for AuthenticationService {
 
         dbg!(format!("user: {:?}", access_token.user));
 
-        Ok(Response::new(SigninPasswordResponse {
+        Ok(Response::new(SigninEmailPasswordResponse {
             token: Some(UserToken {
                 value: access_token.access_token,
             }),
@@ -89,9 +90,25 @@ impl Authentication for AuthenticationService {
 
     async fn logout(
         &self,
-        _request: Request<LogoutRequest>,
+        request: Request<LogoutRequest>,
     ) -> Result<Response<LogoutResponse>, Status> {
-        unimplemented!();
+        _ = if let Some(bearer_token) = request.metadata().get("Authorization") {
+            _ = match bearer_token.to_str() {
+                Ok(token) => self.supabase.logout(token.into()).await,
+                Err(_) => {
+                    return Err(Status::new(
+                        tonic::Code::Internal,
+                        "Error while parsing authorization token",
+                    ))
+                }
+            };
+        } else {
+            return Err(Status::new(
+                tonic::Code::Unauthenticated,
+                "Missing authorization token",
+            ));
+        };
+        Ok(Response::new(LogoutResponse {}))
     }
 }
 
@@ -102,5 +119,18 @@ impl AuthenticationService {
                 .accept_compressed(CompressionEncoding::Gzip)
                 .send_compressed(CompressionEncoding::Gzip),
         ))
+        .layer::<_, _, std::convert::Infallible>(tower_http::trace::TraceLayer::new_for_grpc())
+        .layer(
+            // Layer needed while not serving the client
+            tower_http::cors::CorsLayer::new()
+                .allow_origin(tower_http::cors::Any)
+                .allow_headers(tower_http::cors::Any)
+                .allow_methods(tower_http::cors::Any)
+                .expose_headers([
+                    axum::http::HeaderName::from_static("grpc-encoding"),
+                    axum::http::HeaderName::from_static("grpc-status"),
+                    axum::http::HeaderName::from_static("grpc-message"),
+                ]),
+        )
     }
 }

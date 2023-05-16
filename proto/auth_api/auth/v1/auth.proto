@@ -3,7 +3,7 @@ syntax = "proto3";
 package auth.v1;
 
 service Authentication {
-  rpc SigninPassword (SigninPasswordRequest) returns (SigninPasswordResponse);
+  rpc SigninEmailPassword (SigninEmailPasswordRequest) returns (SigninEmailPasswordResponse);
   rpc SignupEmailPassword (SignupEmailPasswordRequest) returns (SignupEmailPasswordResponse);
   rpc Logout (LogoutRequest) returns (LogoutResponse);
 }
@@ -17,11 +17,11 @@ message UserToken {
   string value = 1;
 }
 
-message SigninPasswordRequest {
+message SigninEmailPasswordRequest {
   bytes credentials = 1; // Credentials message encoded
 }
 
-message SigninPasswordResponse {
+message SigninEmailPasswordResponse {
   UserToken token = 1;
 }
 

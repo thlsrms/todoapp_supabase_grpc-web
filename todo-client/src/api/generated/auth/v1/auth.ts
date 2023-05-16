@@ -26,18 +26,18 @@ export interface UserToken {
     value: string;
 }
 /**
- * @generated from protobuf message auth.v1.SigninPasswordRequest
+ * @generated from protobuf message auth.v1.SigninEmailPasswordRequest
  */
-export interface SigninPasswordRequest {
+export interface SigninEmailPasswordRequest {
     /**
      * @generated from protobuf field: bytes credentials = 1;
      */
     credentials: Uint8Array; // Credentials message encoded
 }
 /**
- * @generated from protobuf message auth.v1.SigninPasswordResponse
+ * @generated from protobuf message auth.v1.SigninEmailPasswordResponse
  */
-export interface SigninPasswordResponse {
+export interface SigninEmailPasswordResponse {
     /**
      * @generated from protobuf field: auth.v1.UserToken token = 1;
      */
@@ -97,29 +97,29 @@ class UserToken$Type extends MessageType<UserToken> {
  */
 export const UserToken = new UserToken$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class SigninPasswordRequest$Type extends MessageType<SigninPasswordRequest> {
+class SigninEmailPasswordRequest$Type extends MessageType<SigninEmailPasswordRequest> {
     constructor() {
-        super("auth.v1.SigninPasswordRequest", [
+        super("auth.v1.SigninEmailPasswordRequest", [
             { no: 1, name: "credentials", kind: "scalar", T: 12 /*ScalarType.BYTES*/ }
         ]);
     }
 }
 /**
- * @generated MessageType for protobuf message auth.v1.SigninPasswordRequest
+ * @generated MessageType for protobuf message auth.v1.SigninEmailPasswordRequest
  */
-export const SigninPasswordRequest = new SigninPasswordRequest$Type();
+export const SigninEmailPasswordRequest = new SigninEmailPasswordRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class SigninPasswordResponse$Type extends MessageType<SigninPasswordResponse> {
+class SigninEmailPasswordResponse$Type extends MessageType<SigninEmailPasswordResponse> {
     constructor() {
-        super("auth.v1.SigninPasswordResponse", [
+        super("auth.v1.SigninEmailPasswordResponse", [
             { no: 1, name: "token", kind: "message", T: () => UserToken }
         ]);
     }
 }
 /**
- * @generated MessageType for protobuf message auth.v1.SigninPasswordResponse
+ * @generated MessageType for protobuf message auth.v1.SigninEmailPasswordResponse
  */
-export const SigninPasswordResponse = new SigninPasswordResponse$Type();
+export const SigninEmailPasswordResponse = new SigninEmailPasswordResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class SignupEmailPasswordRequest$Type extends MessageType<SignupEmailPasswordRequest> {
     constructor() {
@@ -168,7 +168,7 @@ export const LogoutResponse = new LogoutResponse$Type();
  * @generated ServiceType for protobuf service auth.v1.Authentication
  */
 export const Authentication = new ServiceType("auth.v1.Authentication", [
-    { name: "SigninPassword", options: {}, I: SigninPasswordRequest, O: SigninPasswordResponse },
+    { name: "SigninEmailPassword", options: {}, I: SigninEmailPasswordRequest, O: SigninEmailPasswordResponse },
     { name: "SignupEmailPassword", options: {}, I: SignupEmailPasswordRequest, O: SignupEmailPasswordResponse },
     { name: "Logout", options: {}, I: LogoutRequest, O: LogoutResponse }
 ]);

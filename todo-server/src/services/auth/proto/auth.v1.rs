@@ -14,14 +14,14 @@ pub struct UserToken {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SigninPasswordRequest {
+pub struct SigninEmailPasswordRequest {
     /// Credentials message encoded
     #[prost(bytes = "vec", tag = "1")]
     pub credentials: ::prost::alloc::vec::Vec<u8>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SigninPasswordResponse {
+pub struct SigninEmailPasswordResponse {
     #[prost(message, optional, tag = "1")]
     pub token: ::core::option::Option<UserToken>,
 }
@@ -51,11 +51,11 @@ pub mod authentication_server {
     /// Generated trait containing gRPC methods that should be implemented for use with AuthenticationServer.
     #[async_trait]
     pub trait Authentication: Send + Sync + 'static {
-        async fn signin_password(
+        async fn signin_email_password(
             &self,
-            request: tonic::Request<super::SigninPasswordRequest>,
+            request: tonic::Request<super::SigninEmailPasswordRequest>,
         ) -> std::result::Result<
-            tonic::Response<super::SigninPasswordResponse>,
+            tonic::Response<super::SigninEmailPasswordResponse>,
             tonic::Status,
         >;
         async fn signup_email_password(
@@ -149,25 +149,25 @@ pub mod authentication_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/auth.v1.Authentication/SigninPassword" => {
+                "/auth.v1.Authentication/SigninEmailPassword" => {
                     #[allow(non_camel_case_types)]
-                    struct SigninPasswordSvc<T: Authentication>(pub Arc<T>);
+                    struct SigninEmailPasswordSvc<T: Authentication>(pub Arc<T>);
                     impl<
                         T: Authentication,
-                    > tonic::server::UnaryService<super::SigninPasswordRequest>
-                    for SigninPasswordSvc<T> {
-                        type Response = super::SigninPasswordResponse;
+                    > tonic::server::UnaryService<super::SigninEmailPasswordRequest>
+                    for SigninEmailPasswordSvc<T> {
+                        type Response = super::SigninEmailPasswordResponse;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
                         >;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::SigninPasswordRequest>,
+                            request: tonic::Request<super::SigninEmailPasswordRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                (*inner).signin_password(request).await
+                                (*inner).signin_email_password(request).await
                             };
                             Box::pin(fut)
                         }
@@ -179,7 +179,7 @@ pub mod authentication_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = SigninPasswordSvc(inner);
+                        let method = SigninEmailPasswordSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

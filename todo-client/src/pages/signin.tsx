@@ -3,7 +3,7 @@ import { Show } from "solid-js";
 import { RpcError, useAuthContext } from "../context/auth";
 import { useTodoContext } from "../context/todo";
 
-export default function SignUp() {
+export default function SignIn() {
   const { auth, setAuth } = useAuthContext();
   const todoClient = useTodoContext();
   let email: HTMLInputElement | undefined;
@@ -12,11 +12,11 @@ export default function SignUp() {
   function handleSubmit(event: Event) {
     event.preventDefault();
 
-    auth().signupEmailPassword(email?.value ?? '', password?.value ?? '')
+    auth().signinEmailPassword(email?.value ?? '', password?.value ?? '')
       .then((response) => {
         if (response instanceof RpcError) {
           alert(`
-                Signup failed: ${response.message.replaceAll('%20', ' ')}
+                Login failed: ${response.message.replaceAll('%20', ' ')}
                 Code: ${response.code}`
           );
         } else {
@@ -32,7 +32,7 @@ export default function SignUp() {
         <form onSubmit={handleSubmit} class='uk-form-horizontal'>
           <fieldset class='uk-fieldset'>
             <legend class='uk-legend'>
-              Sign Up
+              Login
             </legend>
             <div class='uk-margin'>
               <label for='email' class='uk-form-label uk-margin-top'>
@@ -61,7 +61,7 @@ export default function SignUp() {
             <button type='submit'
               class='uk-button uk-button-default uk-margin-top uk-box-shadow-small'
             >
-              Signup
+              Login
             </button>
           </fieldset>
         </form>

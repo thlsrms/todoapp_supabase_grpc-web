@@ -11,7 +11,7 @@ import {
 } from './generated/todo/v1/todo';
 import { Task } from './generated/todo/v1/task';
 import { TodoClient } from './generated/todo/v1/todo.client';
-export { Task };
+export { Task, RpcError, UserToken };
 
 export class Todo_v1 {
   private client: TodoClient;
@@ -21,7 +21,7 @@ export class Todo_v1 {
     this.webOptions = {
       baseUrl: 'http://localhost:8080',
       format: 'binary',
-      meta: { 'authorization': `Bearer ${accessToken.value}` },
+      meta: { 'Authorization': `Bearer ${accessToken.value}` },
     };
     const transport = new GrpcWebFetchTransport(this.webOptions);
     this.client = new TodoClient(transport);

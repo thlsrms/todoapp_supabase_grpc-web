@@ -9,8 +9,8 @@ import type { LogoutRequest } from "./auth";
 import type { SignupEmailPasswordResponse } from "./auth";
 import type { SignupEmailPasswordRequest } from "./auth";
 import { stackIntercept } from "@protobuf-ts/runtime-rpc";
-import type { SigninPasswordResponse } from "./auth";
-import type { SigninPasswordRequest } from "./auth";
+import type { SigninEmailPasswordResponse } from "./auth";
+import type { SigninEmailPasswordRequest } from "./auth";
 import type { UnaryCall } from "@protobuf-ts/runtime-rpc";
 import type { RpcOptions } from "@protobuf-ts/runtime-rpc";
 /**
@@ -18,9 +18,9 @@ import type { RpcOptions } from "@protobuf-ts/runtime-rpc";
  */
 export interface IAuthenticationClient {
     /**
-     * @generated from protobuf rpc: SigninPassword(auth.v1.SigninPasswordRequest) returns (auth.v1.SigninPasswordResponse);
+     * @generated from protobuf rpc: SigninEmailPassword(auth.v1.SigninEmailPasswordRequest) returns (auth.v1.SigninEmailPasswordResponse);
      */
-    signinPassword(input: SigninPasswordRequest, options?: RpcOptions): UnaryCall<SigninPasswordRequest, SigninPasswordResponse>;
+    signinEmailPassword(input: SigninEmailPasswordRequest, options?: RpcOptions): UnaryCall<SigninEmailPasswordRequest, SigninEmailPasswordResponse>;
     /**
      * @generated from protobuf rpc: SignupEmailPassword(auth.v1.SignupEmailPasswordRequest) returns (auth.v1.SignupEmailPasswordResponse);
      */
@@ -40,11 +40,11 @@ export class AuthenticationClient implements IAuthenticationClient, ServiceInfo 
     constructor(private readonly _transport: RpcTransport) {
     }
     /**
-     * @generated from protobuf rpc: SigninPassword(auth.v1.SigninPasswordRequest) returns (auth.v1.SigninPasswordResponse);
+     * @generated from protobuf rpc: SigninEmailPassword(auth.v1.SigninEmailPasswordRequest) returns (auth.v1.SigninEmailPasswordResponse);
      */
-    signinPassword(input: SigninPasswordRequest, options?: RpcOptions): UnaryCall<SigninPasswordRequest, SigninPasswordResponse> {
+    signinEmailPassword(input: SigninEmailPasswordRequest, options?: RpcOptions): UnaryCall<SigninEmailPasswordRequest, SigninEmailPasswordResponse> {
         const method = this.methods[0], opt = this._transport.mergeOptions(options);
-        return stackIntercept<SigninPasswordRequest, SigninPasswordResponse>("unary", this._transport, method, opt, input);
+        return stackIntercept<SigninEmailPasswordRequest, SigninEmailPasswordResponse>("unary", this._transport, method, opt, input);
     }
     /**
      * @generated from protobuf rpc: SignupEmailPassword(auth.v1.SignupEmailPasswordRequest) returns (auth.v1.SignupEmailPasswordResponse);
