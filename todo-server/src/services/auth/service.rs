@@ -39,7 +39,7 @@ impl Authentication for AuthenticationService {
 
         let access_token = match signup_supabase_response {
             Ok(t) => t,
-            Err(e) => return Err(Status::new(grpc_status::from_http_code(e.code), e.msg)),
+            Err(e) => return Err(grpc_status::from_supabase_error(e)),
         };
 
         dbg!(format!("user: {:?}", access_token.user));
@@ -75,7 +75,7 @@ impl Authentication for AuthenticationService {
 
         let access_token = match signup_supabase_response {
             Ok(t) => t,
-            Err(e) => return Err(Status::new(grpc_status::from_http_code(e.code), e.msg)),
+            Err(e) => return Err(grpc_status::from_supabase_error(e)),
         };
 
         dbg!(format!("user: {:?}", access_token.user));

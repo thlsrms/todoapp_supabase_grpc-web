@@ -26,8 +26,8 @@ pub async fn parse_response<T: serde::de::DeserializeOwned>(
             return Err(ErrorResponse {
                 error: None,
                 error_description: None,
-                code: e.status().unwrap().as_u16(),
-                msg: "An unexpected error ocurred".to_string(),
+                code: Some(e.status().unwrap().as_u16()),
+                msg: Some("An unexpected error ocurred".to_string()),
             })
         }
     };
@@ -38,7 +38,7 @@ fn deserialize_error() -> ErrorResponse {
     ErrorResponse {
         error: None,
         error_description: None,
-        code: 500,
-        msg: "Error deserializing response".to_string(),
+        code: Some(500),
+        msg: Some("Error deserializing response".to_string()),
     }
 }
