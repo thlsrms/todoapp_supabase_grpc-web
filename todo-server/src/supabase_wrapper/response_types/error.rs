@@ -15,8 +15,8 @@ pub struct ErrorResponse {
 
     /// The HTTP status code. Usually missing if `error` is present.
     /// Example: 400
-    pub code: u16,
+    pub code: Option<u16>,
 
     /// A basic message describing the problem with the request. Usually missing if `error` is present.
-    pub msg: String,
+    pub msg: Option<String>,
 }
