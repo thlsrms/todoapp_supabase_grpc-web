@@ -1,8 +1,8 @@
-import { Accessor, Setter, createContext, useContext, createSignal, JSX, createEffect } from "solid-js";
+import { Accessor, createContext, useContext, createSignal, JSX, createEffect } from "solid-js";
 
 interface ContextProps {
   theme: Accessor<string>,
-  setTheme: Setter<string>
+  toggleTheme: Function,
 }
 const GlobalContext = createContext<ContextProps>();
 type Props<P = { theme?: string }> = P & { children?: JSX.Element };
@@ -21,8 +21,12 @@ export function GlobalContextProvider(props: Props): JSX.Element {
     }
   })
 
+  const toggleTheme = () => {
+    theme() === 'dark' ? setTheme('light') : setTheme('dark')
+  }
+
   return (
-    <GlobalContext.Provider value={{ theme, setTheme }}>
+    <GlobalContext.Provider value={{ theme, toggleTheme }}>
       {props.children}
     </GlobalContext.Provider>
   )

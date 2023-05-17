@@ -4,15 +4,15 @@ import { RpcError, useAuthContext } from "../context/auth";
 import { useTodoContext } from "../context/todo";
 
 export default function SignIn() {
-  const { auth, setAuth } = useAuthContext();
-  const todoClient = useTodoContext();
+  const authCtx = useAuthContext();
+  const todoCtx = useTodoContext();
   let email: HTMLInputElement | undefined;
   let password: HTMLInputElement | undefined;
 
   function handleSubmit(event: Event) {
     event.preventDefault();
 
-    auth().signinEmailPassword(email?.value ?? '', password?.value ?? '')
+    authCtx.client().signinEmailPassword(email?.value ?? '', password?.value ?? '')
       .then((response) => {
         if (response instanceof RpcError) {
           alert(`
@@ -20,8 +20,8 @@ export default function SignIn() {
                 Code: ${response.code}`
           );
         } else {
-          setAuth(response);
-          todoClient.setTodoClient(response);
+          authCtx.setClient(response);
+          todoCtx.setClient(response);
         }
       })
   }
@@ -66,7 +66,7 @@ export default function SignIn() {
           </fieldset>
         </form>
       </div>
-      <Show when={todoClient.todoApi()}>
+      <Show when={todoCtx.client()}>
         <Navigate href={'/tasks'} />
       </Show>
     </section>

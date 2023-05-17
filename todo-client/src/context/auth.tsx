@@ -3,16 +3,16 @@ import { Auth_v1, UserToken, RpcError } from '../api/auth_v1';
 export { RpcError };
 
 interface AuthContextProps {
-  auth: Accessor<Auth_v1>,
-  setAuth: Function,
+  client: Accessor<Auth_v1>,
+  setClient: Function,
 }
 const AuthContext = createContext<AuthContextProps>();
 type Props<P = {}> = P & { children?: JSX.Element };
 
 export function AuthContextProvider(props: Props): JSX.Element {
-  const [auth, setAuthApi] = createSignal(new Auth_v1());
+  const [client, setAuthApi] = createSignal(new Auth_v1());
 
-  const setAuth = (userToken?: UserToken) => {
+  const setClient = (userToken?: UserToken) => {
     if (userToken !== undefined) {
       setAuthApi(new Auth_v1(userToken));
     } else {
@@ -21,7 +21,7 @@ export function AuthContextProvider(props: Props): JSX.Element {
   }
 
   return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
+    <AuthContext.Provider value={{ client, setClient }}>
       {props.children}
     </AuthContext.Provider>
   )
