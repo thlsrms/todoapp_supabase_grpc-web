@@ -23,31 +23,44 @@ export default function Navbar() {
   }
 
   return (
-    <nav class='uk-flex uk-flex-center uk-margin'>
-      <ul class='uk-flex uk-flex-row uk-flex-around uk-width-xlarge'>
-        <li><Link href='/'>Home</Link></li>
-        <Show when={todoCtx.client()} fallback={
-          <>
-            <li><Link href='/signin'>Login</Link></li>
-            <li><Link href='/signup'>Sign Up</Link></li>
-          </>
-        }>
-          <li class='uk-flex uk-flex-middle'>
-            <button onClick={logout} class='uk-button uk-button-link'>
-              Logout
-              <span class='i-mdi-exit-to-app w-10 h-5 uk-button uk-button-small' />
-            </button>
-          </li>
+    <nav uk-navbar class='uk-navbar-container uk-navbar-transparent uk-box-shadow-small' >
+      <div class='uk-navbar-left pl-5'>
+        <Link href='/' class='uk-navbar-item uk-logo'>
+          Todo
+        </Link>
+      </div>
+      <div class='uk-navbar-center'>
+        <ul class='uk-navbar-nav'>
+          <Show when={!todoCtx.client()}>
+            <li>
+              <Link href='/signin' class='uk-text-emphasis'>
+                Login
+              </Link>
+            </li>
+            <li>
+              <Link href='/signup' class='uk-text-emphasis'>
+                Sign Up
+              </Link>
+            </li>
+          </Show>
+        </ul>
+      </div>
+      <div class='uk-navbar-right pr-5'>
+        <Show when={todoCtx.client()}>
+          <button onClick={logout} class='uk-button uk-button-link uk-flex uk-flex-middle'>
+            Logout
+            <span class='i-mdi-exit-to-app w-10 h-5 uk-button uk-button-small' />
+          </button>
+          <hr class='uk-divider-vertical max-h-5 mt-5' />
         </Show>
-      </ul>
-      <div class='uk-inline uk-position-right uk-margin-right'>
-        <button onClick={() => globalCtx.toggleTheme()} class='uk-button uk-button-link mb-2'>
+        <button onClick={() => globalCtx.toggleTheme()}
+          class='uk-button uk-button-link uk-button-small'
+        >
           <span class={
             `${globalCtx.theme() === 'light' ?
               'i-mdi-moon-waxing-crescent' : 'i-mdi-white-balance-sunny'}
-               w-10 h-5 uk-button uk-button-small`}
+               h-5 uk-button uk-button-small`}
           />
-          {globalCtx.theme() === 'light' ? 'Dark' : 'Light'} mode
         </button>
       </div>
     </nav>

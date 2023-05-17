@@ -14,7 +14,7 @@ export default function App() {
         <AuthContextProvider>
           <TodoContextProvider>
             <Navbar />
-            <main class='uk-margin-left'>
+            <main class='uk-margin'>
               <Route />
             </main>
           </TodoContextProvider>
