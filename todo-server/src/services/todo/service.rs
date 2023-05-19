@@ -24,7 +24,7 @@ impl Todo for TodoService {
     ) -> Result<Response<CreateTaskResponse>, Status> {
         let Authorization { claims, token } = req.extensions().get::<Authorization>().unwrap();
 
-        let new_task = serde_json::to_string(&schema::tasks::InsertTask {
+        let new_task = serde_json::to_string(&schema::InsertTask {
             author_id: claims.sub.clone(),
             title: req.get_ref().title.clone(),
             description: req.get_ref().description.clone(),
@@ -35,14 +35,14 @@ impl Todo for TodoService {
             .supabase
             .db()
             .from("tasks")
-            .auth(&token)
+            .auth(token)
             .insert(new_task)
             .execute()
             .await;
 
-        match parse_response_query::<Vec<schema::tasks::QueryTask>>(supabase_query).await {
+        match parse_response_query::<schema::QueryTask>(supabase_query).await {
             Ok(res) => Ok(Response::new(CreateTaskResponse {
-                task: Some(res[0].into_task()),
+                task: Some(res[0].to_task()),
             })),
             Err(err) => return Err(grpc_status::from_supabase_error(err)),
         }
@@ -59,7 +59,7 @@ impl Todo for TodoService {
             .supabase
             .db()
             .from("tasks")
-            .auth(&token)
+            .auth(token)
             .eq("author_id", &claims.sub)
             .select("*");
 
@@ -105,10 +105,10 @@ impl Todo for TodoService {
             }
         };
 
-        match parse_response_query::<Vec<schema::tasks::QueryTask>>(supabase_response).await {
+        match parse_response_query::<schema::QueryTask>(supabase_response).await {
             Ok(res) => Ok(Response::new(FetchTaskResponse {
                 task_list: Some(TaskList {
-                    tasks: res.into_iter().map(|t| t.into_task()).collect(),
+                    tasks: res.into_iter().map(|t| t.to_task()).collect(),
                 }),
             })),
             Err(err) => return Err(grpc_status::from_supabase_error(err)),
@@ -121,7 +121,7 @@ impl Todo for TodoService {
     ) -> Result<Response<UpdateTaskResponse>, Status> {
         let Authorization { claims, token } = req.extensions().get::<Authorization>().unwrap();
 
-        let updating_task = serde_json::to_string(&schema::tasks::QueryTask {
+        let updating_task = serde_json::to_string(&schema::QueryTask {
             id: req.get_ref().id,
             author_id: Some(claims.sub.clone()),
             title: req.get_ref().title.clone(),
@@ -134,15 +134,15 @@ impl Todo for TodoService {
             .supabase
             .db()
             .from("tasks")
-            .auth(&token)
+            .auth(token)
             .update(updating_task)
             .eq("id", req.get_ref().id.to_string())
             .execute()
             .await;
 
-        match parse_response_query::<Vec<schema::tasks::QueryTask>>(supabase_query).await {
+        match parse_response_query::<schema::QueryTask>(supabase_query).await {
             Ok(res) => Ok(Response::new(UpdateTaskResponse {
-                task: Some(res[0].into_task()),
+                task: Some(res[0].to_task()),
             })),
             Err(err) => return Err(grpc_status::from_supabase_error(err)),
         }
@@ -158,16 +158,16 @@ impl Todo for TodoService {
             .supabase
             .db()
             .from("tasks")
-            .auth(&token)
+            .auth(token)
             .eq("author_id", &claims.sub)
             .eq("id", req.get_ref().id.to_string())
             .delete()
             .execute()
             .await;
 
-        match parse_response_query::<Vec<schema::tasks::QueryTask>>(supabase_query).await {
+        match parse_response_query::<schema::QueryTask>(supabase_query).await {
             Ok(res) => Ok(Response::new(DeleteTaskResponse {
-                task: Some(res[0].into_task()),
+                task: Some(res[0].to_task()),
             })),
             Err(err) => return Err(grpc_status::from_supabase_error(err)),
         }
@@ -175,7 +175,7 @@ impl Todo for TodoService {
 }
 
 impl TodoService {
-    pub fn new(supabase: Arc<Supabase>) -> axum::routing::MethodRouter {
+    pub fn init(supabase: Arc<Supabase>) -> axum::routing::MethodRouter {
         axum::routing::any_service(tonic_web::enable(
             TodoServer::new(TodoService { supabase })
                 .accept_compressed(CompressionEncoding::Gzip)

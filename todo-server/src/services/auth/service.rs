@@ -1,7 +1,7 @@
 use super::proto::auth::v1::authentication_server::*;
 use super::proto::auth::v1::*;
-use crate::supabase_wrapper::utils::parse_response;
-use crate::{services::grpc_status, supabase_wrapper::response_types::AccessToken};
+use crate::services::grpc_status;
+use crate::supabase_wrapper::{response_types::AccessToken, utils::parse_response};
 use prost::{bytes::Bytes, Message};
 use std::sync::Arc;
 use supabase_rust::Supabase;
@@ -27,14 +27,12 @@ impl Authentication for AuthenticationService {
             }
         };
 
-        let signup_supabase_response = parse_response::<AccessToken>(
-            self.supabase
-                .sign_in_password(&credentials.email, &credentials.password)
-                .await,
-        )
-        .await;
+        let signup_supabase_response = self
+            .supabase
+            .sign_in_password(&credentials.email, &credentials.password)
+            .await;
 
-        let access_token = match signup_supabase_response {
+        let access_token = match parse_response::<AccessToken>(signup_supabase_response).await {
             Ok(t) => t,
             Err(e) => return Err(grpc_status::from_supabase_error(e)),
         };
@@ -61,14 +59,12 @@ impl Authentication for AuthenticationService {
             }
         };
 
-        let signup_supabase_response = parse_response::<AccessToken>(
-            self.supabase
-                .signup_email_password(&credentials.email, &credentials.password)
-                .await,
-        )
-        .await;
+        let signup_supabase_response = self
+            .supabase
+            .signup_email_password(&credentials.email, &credentials.password)
+            .await;
 
-        let access_token = match signup_supabase_response {
+        let access_token = match parse_response::<AccessToken>(signup_supabase_response).await {
             Ok(t) => t,
             Err(e) => return Err(grpc_status::from_supabase_error(e)),
         };
@@ -84,28 +80,26 @@ impl Authentication for AuthenticationService {
         &self,
         request: Request<LogoutRequest>,
     ) -> Result<Response<LogoutResponse>, Status> {
-        _ = if let Some(bearer_token) = request.metadata().get("Authorization") {
-            _ = match bearer_token.to_str() {
-                Ok(token) => self.supabase.logout(token.into()).await,
-                Err(_) => {
-                    return Err(Status::new(
-                        tonic::Code::Internal,
-                        "Error while parsing authorization token",
-                    ))
-                }
-            };
-        } else {
-            return Err(Status::new(
-                tonic::Code::Unauthenticated,
-                "Missing authorization token",
-            ));
-        };
-        Ok(Response::new(LogoutResponse {}))
+        match request.metadata().get("Authorization") {
+            Some(t) => {
+                _ = self
+                    .supabase
+                    .logout(t.to_str().unwrap().replace("Bearer ", ""))
+                    .await;
+                Ok(Response::new(LogoutResponse {}))
+            }
+            None => {
+                return Err(Status::new(
+                    tonic::Code::Unauthenticated,
+                    "Missing authorization token",
+                ));
+            }
+        }
     }
 }
 
 impl AuthenticationService {
-    pub fn new(supabase: Arc<Supabase>) -> axum::routing::MethodRouter {
+    pub fn init(supabase: Arc<Supabase>) -> axum::routing::MethodRouter {
         axum::routing::any_service(tonic_web::enable(
             AuthenticationServer::new(AuthenticationService { supabase })
                 .accept_compressed(CompressionEncoding::Gzip)

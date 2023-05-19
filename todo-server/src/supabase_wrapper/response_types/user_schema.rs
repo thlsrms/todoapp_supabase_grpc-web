@@ -1,4 +1,4 @@
-/// Struct describing the user related to the issued access and refresh tokens.
+/// Schema describing the user related to the issued access and refresh tokens.
 #[derive(serde::Deserialize)]
 pub struct User {
     /// format: uuid

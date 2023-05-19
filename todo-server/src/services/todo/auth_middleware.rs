@@ -25,7 +25,7 @@ pub fn validate_authorization(mut req: Request<()>) -> Result<Request<()>, Statu
 
     match metadata.get("authorization") {
         Some(t) => {
-            let decoding_key = DecodingKey::from_secret(SUPABASE_JWT.as_ref()).into();
+            let decoding_key = DecodingKey::from_secret(SUPABASE_JWT.as_ref());
             let validation = Validation::new(Algorithm::HS256);
             let decoded_token = decode::<Claims>(
                 &t.to_str().unwrap().replace("Bearer ", ""),
@@ -41,24 +41,20 @@ pub fn validate_authorization(mut req: Request<()>) -> Result<Request<()>, Statu
                             email: token_data.claims.email,
                             exp: token_data.claims.exp,
                         },
-                        token: t.to_str().unwrap().replace("Bearer ", "").to_string(),
+                        token: t.to_str().unwrap().replace("Bearer ", ""),
                     });
 
                     Ok(req)
                 }
-                Err(_) => {
-                    return Err(Status::new(
-                        tonic::Code::PermissionDenied,
-                        "Invalid authorization token",
-                    ))
-                }
+                Err(_) => Err(Status::new(
+                    tonic::Code::PermissionDenied,
+                    "Invalid authorization token",
+                )),
             }
         }
-        None => {
-            return Err(Status::new(
-                tonic::Code::Unauthenticated,
-                "Missing authorization token",
-            ));
-        }
+        None => Err(Status::new(
+            tonic::Code::Unauthenticated,
+            "Missing authorization token",
+        )),
     }
 }
