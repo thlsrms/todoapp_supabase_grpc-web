@@ -14,7 +14,7 @@ pub struct Task {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Tasks {
+pub struct TaskList {
     #[prost(message, repeated, tag = "1")]
     pub tasks: ::prost::alloc::vec::Vec<Task>,
 }
@@ -23,7 +23,7 @@ pub struct Tasks {
 pub struct CreateTaskRequest {
     #[prost(string, tag = "1")]
     pub title: ::prost::alloc::string::String,
-    #[prost(string, optional, tag = "3")]
+    #[prost(string, optional, tag = "2")]
     pub description: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -71,7 +71,7 @@ pub struct FetchTaskRequest {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FetchTaskResponse {
     #[prost(message, optional, tag = "1")]
-    pub tasks: ::core::option::Option<Tasks>,
+    pub task_list: ::core::option::Option<TaskList>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

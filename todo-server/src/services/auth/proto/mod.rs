@@ -1,5 +1,7 @@
+mod auth_v1;
+
 pub mod auth {
     pub mod v1 {
-        include!("auth.v1.rs");
+        pub use super::super::auth_v1::*;
     }
 }

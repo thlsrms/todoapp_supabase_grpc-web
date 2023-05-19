@@ -1,5 +1,7 @@
+mod todo_v1;
+
 pub mod todo {
     pub mod v1 {
-        include!("todo.v1.rs");
+        pub use super::super::todo_v1::*;
     }
 }
