@@ -1,9 +1,5 @@
-use super::proto::auth::v1::{
-    authentication_server::{Authentication, AuthenticationServer},
-    Credentials, LogoutRequest, LogoutResponse, SigninEmailPasswordRequest,
-    SigninEmailPasswordResponse, SignupEmailPasswordRequest, SignupEmailPasswordResponse,
-    UserToken,
-};
+use super::proto::auth::v1::authentication_server::*;
+use super::proto::auth::v1::*;
 use crate::supabase_wrapper::utils::parse_response;
 use crate::{services::grpc_status, supabase_wrapper::response_types::AccessToken};
 use prost::{bytes::Bytes, Message};

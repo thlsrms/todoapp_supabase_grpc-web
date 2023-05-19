@@ -1,7 +1,5 @@
-use crate::{
-    config::Config,
-    services::{AuthenticationService, TodoService},
-};
+use crate::config::Config;
+use crate::services::{AuthenticationService, TodoService};
 use std::{error::Error, net::SocketAddr, sync::Arc};
 use supabase_rust::Supabase;
 

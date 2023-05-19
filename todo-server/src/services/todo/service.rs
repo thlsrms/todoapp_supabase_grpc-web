@@ -1,22 +1,16 @@
 use super::auth_middleware::{self, Authorization};
-use super::proto::todo::v1::{
-    todo_server::{Todo, TodoServer},
-    CreateTaskRequest, CreateTaskResponse, DeleteTaskRequest, DeleteTaskResponse, FetchTaskRequest,
-    FetchTaskResponse, FilterField, TaskList, UpdateTaskRequest, UpdateTaskResponse,
-};
+use super::proto::todo::v1::todo_server::*;
+use super::proto::todo::v1::*;
 use super::schema;
-use crate::{services::grpc_status, supabase_wrapper::utils::parse_response_query};
+use crate::services::grpc_status;
+use crate::supabase_wrapper::utils::parse_response_query;
 use std::{convert::Infallible, sync::Arc};
 use supabase_rust::Supabase;
-use tonic::{
-    codegen::{http::HeaderName, CompressionEncoding},
-    service::interceptor,
-    Request, Response, Status,
-};
-use tower_http::{
-    cors::{self, CorsLayer},
-    trace::TraceLayer,
-};
+use tonic::codegen::{http::HeaderName, CompressionEncoding};
+use tonic::service::interceptor;
+use tonic::{Request, Response, Status};
+use tower_http::cors::{self, CorsLayer};
+use tower_http::trace::TraceLayer;
 
 pub struct TodoService {
     supabase: Arc<Supabase>,
