@@ -4,7 +4,7 @@ use super::proto::auth::v1::{
     SigninEmailPasswordResponse, SignupEmailPasswordRequest, SignupEmailPasswordResponse,
     UserToken,
 };
-use crate::{config::Config, supabase_wrapper::utils::parse_response};
+use crate::supabase_wrapper::utils::parse_response;
 use crate::{services::grpc_status, supabase_wrapper::response_types::AccessToken};
 use prost::{bytes::Bytes, Message};
 use std::sync::Arc;
@@ -43,8 +43,6 @@ impl Authentication for AuthenticationService {
             Err(e) => return Err(grpc_status::from_supabase_error(e)),
         };
 
-        dbg!(format!("user: {:?}", access_token.user));
-
         Ok(Response::new(SigninEmailPasswordResponse {
             token: Some(UserToken {
                 value: access_token.access_token,
@@ -79,8 +77,6 @@ impl Authentication for AuthenticationService {
             Err(e) => return Err(grpc_status::from_supabase_error(e)),
         };
 
-        dbg!(format!("user: {:?}", access_token.user));
-
         Ok(Response::new(SignupEmailPasswordResponse {
             token: Some(UserToken {
                 value: access_token.access_token,
@@ -113,7 +109,7 @@ impl Authentication for AuthenticationService {
 }
 
 impl AuthenticationService {
-    pub fn new(_config: &Config, supabase: Arc<Supabase>) -> axum::routing::MethodRouter {
+    pub fn new(supabase: Arc<Supabase>) -> axum::routing::MethodRouter {
         axum::routing::any_service(tonic_web::enable(
             AuthenticationServer::new(AuthenticationService { supabase })
                 .accept_compressed(CompressionEncoding::Gzip)

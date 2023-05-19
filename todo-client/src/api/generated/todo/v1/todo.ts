@@ -3,7 +3,7 @@
 // tslint:disable
 import { ServiceType } from "@protobuf-ts/runtime-rpc";
 import { MessageType } from "@protobuf-ts/runtime";
-import { Tasks } from "./task";
+import { TaskList } from "./task";
 import { Task } from "./task";
 /**
  * @generated from protobuf message todo.v1.CreateTaskRequest
@@ -14,7 +14,7 @@ export interface CreateTaskRequest {
      */
     title: string;
     /**
-     * @generated from protobuf field: optional string description = 3;
+     * @generated from protobuf field: optional string description = 2;
      */
     description?: string;
 }
@@ -90,9 +90,9 @@ export interface FetchTaskRequest {
  */
 export interface FetchTaskResponse {
     /**
-     * @generated from protobuf field: todo.v1.Tasks tasks = 1;
+     * @generated from protobuf field: todo.v1.TaskList task_list = 1;
      */
-    tasks?: Tasks;
+    taskList?: TaskList;
 }
 /**
  * @generated from protobuf message todo.v1.DeleteTaskRequest
@@ -136,7 +136,7 @@ class CreateTaskRequest$Type extends MessageType<CreateTaskRequest> {
     constructor() {
         super("todo.v1.CreateTaskRequest", [
             { no: 1, name: "title", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "description", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ }
+            { no: 2, name: "description", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ }
         ]);
     }
 }
@@ -213,7 +213,7 @@ export const FetchTaskRequest = new FetchTaskRequest$Type();
 class FetchTaskResponse$Type extends MessageType<FetchTaskResponse> {
     constructor() {
         super("todo.v1.FetchTaskResponse", [
-            { no: 1, name: "tasks", kind: "message", T: () => Tasks }
+            { no: 1, name: "task_list", kind: "message", T: () => TaskList }
         ]);
     }
 }

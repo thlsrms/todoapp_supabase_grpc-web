@@ -1,10 +1,22 @@
+import { RpcError, useTodoContext } from "../context/todo";
 
 export default function SearchForm() {
+  const todoCtx = useTodoContext();
   let searchInput: HTMLInputElement | undefined;
   let searchFilter: HTMLSelectElement | undefined;
 
-  function handleSearch(event: Event) {
+  async function handleSearch(event: Event) {
     event.preventDefault();
+
+    const fetchResponse = await todoCtx.client().fetchTask(undefined, {
+      pattern: searchInput.value, filterField: searchFilter.selectedIndex
+    });
+    if (fetchResponse instanceof RpcError) {
+      console.error(`Tasks fetch error: ${fetchResponse.message.replaceAll('%20', ' ')}`)
+    } else {
+      searchInput.value = ''
+      todoCtx.mutate([...fetchResponse.taskList.tasks]);
+    }
   }
 
   return (
@@ -18,7 +30,9 @@ export default function SearchForm() {
           <div uk-form-custom='target: > * > span:first-child'
             class='ml-2 w-40 uk-inline'
           >
-            <select aria-label='Custom controls' ref={searchFilter} required>
+            <select id='filtersearch' aria-label='Custom controls' required
+              ref={searchFilter}
+            >
               <option value='0' class='uk-text-bold'>Title & Desc</option>
               <option value='1' class=''>Title</option>
               <option value='2' class=''>Description</option>
@@ -33,7 +47,7 @@ export default function SearchForm() {
           <span class='i-mdi-feature-search-outline w-10 h-5 uk-button uk-button-small' />
         </button>
       </div>
-    </form>
+    </form >
 
   );
 }

@@ -10,14 +10,17 @@ members = ["supabase-rust"]
 
 [dependencies]
 axum = "0.6.18"
+jsonwebtoken = "8.3.0"
+lazy_static = "1.4.0"
 prost = "0.11.9"
 reqwest = "0.11.17"
 serde = { version = "1.0.163", features = ["derive"] }
+serde_json = "1.0.96"
 supabase-rust = { path = "./supabase-rust"}
 tokio = { version = "1.28.1", features = ["rt-multi-thread", "macros"] }
 tonic = { version = "0.9.2", features = ["gzip"] }
 tonic-web = "0.9.2"
-tower-http = {version = "0.4.0", features = ["compression-gzip", "cors", "trace", "validate-request", "auth", "fs"]}
+tower-http = { version = "0.4.0", features = ["compression-gzip", "cors", "trace", "add-extension"] }
 tracing = "0.1.37"
 tracing-subscriber = "0.3.17"
 

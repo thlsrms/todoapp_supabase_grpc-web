@@ -28,9 +28,9 @@ export interface Task {
     description?: string;
 }
 /**
- * @generated from protobuf message todo.v1.Tasks
+ * @generated from protobuf message todo.v1.TaskList
  */
-export interface Tasks {
+export interface TaskList {
     /**
      * @generated from protobuf field: repeated todo.v1.Task tasks = 1;
      */
@@ -53,14 +53,14 @@ class Task$Type extends MessageType<Task> {
  */
 export const Task = new Task$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class Tasks$Type extends MessageType<Tasks> {
+class TaskList$Type extends MessageType<TaskList> {
     constructor() {
-        super("todo.v1.Tasks", [
+        super("todo.v1.TaskList", [
             { no: 1, name: "tasks", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Task }
         ]);
     }
 }
 /**
- * @generated MessageType for protobuf message todo.v1.Tasks
+ * @generated MessageType for protobuf message todo.v1.TaskList
  */
-export const Tasks = new Tasks$Type();
+export const TaskList = new TaskList$Type();

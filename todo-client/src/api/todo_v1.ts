@@ -2,12 +2,10 @@ import { GrpcWebFetchTransport, GrpcWebOptions } from '@protobuf-ts/grpcweb-tran
 import { RpcError } from '@protobuf-ts/runtime-rpc';
 import { UserToken } from './auth_v1';
 import {
-  CreateTaskRequest, CreateTaskResponse,
+  CreateTaskRequest,
   DeleteTaskRequest, DeleteTaskResponse,
   FetchTaskRequest, FetchTaskResponse,
-  FilterField,
-  TaskFilter,
-  UpdateTaskRequest, UpdateTaskResponse
+  TaskFilter, UpdateTaskRequest,
 } from './generated/todo/v1/todo';
 import { Task } from './generated/todo/v1/task';
 import { TodoClient } from './generated/todo/v1/todo.client';
@@ -27,12 +25,12 @@ export class Todo_v1 {
     this.client = new TodoClient(transport);
   }
 
-  async createTask(title: string, description?: string): Promise<CreateTaskResponse | RpcError> {
+  async createTask(title: string, description?: string): Promise<Task | RpcError> {
     try {
       const request = await this.client.createTask(
         CreateTaskRequest.create({ title, description })
       );
-      return request.response;
+      return request.response.task;
     } catch (error) {
       return error as RpcError;
     }
@@ -40,12 +38,12 @@ export class Todo_v1 {
 
   async updateTask(
     { id, title, completed, description }: UpdateTaskRequest
-  ): Promise<UpdateTaskResponse | RpcError> {
+  ): Promise<Task | RpcError> {
     try {
       const request = await this.client.updateTask(
         UpdateTaskRequest.create({ id, title, completed, description })
       );
-      return request.response;
+      return request.response.task;
     } catch (error) {
       return error as RpcError;
     }
@@ -70,7 +68,7 @@ export class Todo_v1 {
     }
   }
 
-  async deleteTask({ id }: DeleteTaskRequest): Promise<DeleteTaskResponse | RpcError> {
+  async deleteTask(id: number): Promise<DeleteTaskResponse | RpcError> {
     try {
       const request = await this.client.deleteTask(DeleteTaskRequest.create({ id }));
       return request.response;

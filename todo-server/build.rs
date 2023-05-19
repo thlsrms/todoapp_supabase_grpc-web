@@ -2,7 +2,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     tonic_build::configure()
         .build_client(false)
         .out_dir("./src/services/auth/proto/")
-        .include_file("mod.rs")
         .compile(
             &[
                 // Auth proto files
@@ -13,7 +12,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     tonic_build::configure()
         .build_client(false)
         .out_dir("./src/services/todo/proto/")
-        .include_file("mod.rs")
         .compile(
             &[
                 // Todo proto files

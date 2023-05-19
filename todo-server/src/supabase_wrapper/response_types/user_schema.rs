@@ -1,5 +1,5 @@
 /// Struct describing the user related to the issued access and refresh tokens.
-#[derive(serde::Deserialize, Debug)]
+#[derive(serde::Deserialize)]
 pub struct User {
     /// format: uuid
     pub id: String,
@@ -68,7 +68,7 @@ pub struct User {
 }
 
 /// Represents a MFA factor.
-#[derive(serde::Deserialize, Debug)]
+#[derive(serde::Deserialize)]
 pub struct MFAFactorSchema {
     /// format: uuid
     pub id: String,
@@ -85,7 +85,7 @@ pub struct MFAFactorSchema {
     pub factor_type: String,
 }
 
-#[derive(serde::Deserialize, Debug)]
+#[derive(serde::Deserialize)]
 pub struct AppMetadata {
     pub provider: String,
     pub providers: Vec<String>,

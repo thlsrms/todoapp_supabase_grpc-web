@@ -1,4 +1,4 @@
-#[derive(serde::Deserialize, Debug)]
+#[derive(serde::Deserialize)]
 pub struct ErrorResponse {
     /// Certain responses will contain this property with the provided values.
     /// Usually one of these:

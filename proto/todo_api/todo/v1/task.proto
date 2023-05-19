@@ -10,6 +10,6 @@ message Task {
   optional string description = 5;
 }
 
-message Tasks {
+message TaskList {
   repeated Task tasks = 1;
 }

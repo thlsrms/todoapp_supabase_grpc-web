@@ -1,4 +1,4 @@
-#[derive(serde::Deserialize, Debug)]
+#[derive(serde::Deserialize)]
 pub struct AccessToken {
     /// A valid JWT that will expire in `expires_in` seconds.
     pub access_token: String,

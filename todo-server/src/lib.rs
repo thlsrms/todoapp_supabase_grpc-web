@@ -26,7 +26,7 @@ pub async fn start(config: Config) -> Result<(), Box<dyn Error>> {
             axum::routing::Router::new()
                 .route(
                     "/auth.v1.Authentication/*rpc",
-                    AuthenticationService::new(&config, Arc::clone(&supabase)),
+                    AuthenticationService::new(Arc::clone(&supabase)),
                 )
                 .route(
                     "/todo.v1.Todo/*rpc",

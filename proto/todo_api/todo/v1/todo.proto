@@ -13,7 +13,7 @@ service Todo {
 
 message CreateTaskRequest {
   string title = 1;
-  optional string description = 3;
+  optional string description = 2;
 }
 message CreateTaskResponse {
   Task task = 1;
@@ -48,7 +48,7 @@ message FetchTaskRequest {
 }
 
 message FetchTaskResponse {
-  Tasks tasks = 1;
+  TaskList task_list = 1;
 }
 
 message DeleteTaskRequest {
