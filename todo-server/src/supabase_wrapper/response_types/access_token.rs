@@ -1,5 +1,7 @@
+// AccessToken schema as outlined in https://github.com/supabase/gotrue/blob/master/openapi.yaml
+
 #[derive(serde::Deserialize)]
-pub struct AccessToken {
+pub struct SupabaseAccessToken {
     /// A valid JWT that will expire in `expires_in` seconds.
     pub access_token: String,
 
@@ -13,5 +15,5 @@ pub struct AccessToken {
     /// by using the refresh token with the `refresh_token` grant type
     pub expires_in: i32,
 
-    pub user: super::User,
+    pub user: super::user_schema::SupabaseUser,
 }

@@ -1,7 +1,7 @@
 use super::proto::auth::v1::authentication_server::*;
 use super::proto::auth::v1::*;
 use crate::services::grpc_status;
-use crate::supabase_wrapper::{response_types::AccessToken, utils::parse_response};
+use crate::supabase_wrapper::{parse_response, SupabaseAccessToken};
 use prost::{bytes::Bytes, Message};
 use std::sync::Arc;
 use supabase_rust::Supabase;
@@ -32,10 +32,11 @@ impl Authentication for AuthenticationService {
             .sign_in_password(&credentials.email, &credentials.password)
             .await;
 
-        let access_token = match parse_response::<AccessToken>(signup_supabase_response).await {
-            Ok(t) => t,
-            Err(e) => return Err(grpc_status::from_supabase_error(e)),
-        };
+        let access_token =
+            match parse_response::<SupabaseAccessToken>(signup_supabase_response).await {
+                Ok(t) => t,
+                Err(e) => return Err(grpc_status::from_supabase_error(e)),
+            };
 
         Ok(Response::new(SigninEmailPasswordResponse {
             token: Some(UserToken {
@@ -64,10 +65,11 @@ impl Authentication for AuthenticationService {
             .signup_email_password(&credentials.email, &credentials.password)
             .await;
 
-        let access_token = match parse_response::<AccessToken>(signup_supabase_response).await {
-            Ok(t) => t,
-            Err(e) => return Err(grpc_status::from_supabase_error(e)),
-        };
+        let access_token =
+            match parse_response::<SupabaseAccessToken>(signup_supabase_response).await {
+                Ok(t) => t,
+                Err(e) => return Err(grpc_status::from_supabase_error(e)),
+            };
 
         Ok(Response::new(SignupEmailPasswordResponse {
             token: Some(UserToken {

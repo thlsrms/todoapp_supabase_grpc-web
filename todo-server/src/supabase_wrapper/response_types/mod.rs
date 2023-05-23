@@ -5,6 +5,6 @@ mod access_token;
 mod error;
 mod user_schema;
 
-pub use access_token::AccessToken;
-pub use error::ErrorResponse;
-pub use user_schema::User;
+pub use access_token::SupabaseAccessToken;
+pub use error::SupabaseError;
+pub use user_schema::SupabaseUser;

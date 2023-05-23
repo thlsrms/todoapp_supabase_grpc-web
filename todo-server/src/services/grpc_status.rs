@@ -1,4 +1,4 @@
-use crate::supabase_wrapper::response_types::ErrorResponse;
+use crate::supabase_wrapper::SupabaseError;
 
 pub fn code_from_http(http_response_code: u16) -> tonic::Code {
     match http_response_code {
@@ -22,7 +22,7 @@ pub fn code_from_http(http_response_code: u16) -> tonic::Code {
     }
 }
 
-pub fn from_supabase_error(error: ErrorResponse) -> tonic::Status {
+pub fn from_supabase_error(error: SupabaseError) -> tonic::Status {
     // If "code" is available "msg" should also be available
     // the same for "error" and "error_description".
     if error.code.is_some() {

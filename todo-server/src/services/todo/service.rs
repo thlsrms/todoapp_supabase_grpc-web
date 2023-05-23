@@ -3,7 +3,7 @@ use super::proto::todo::v1::todo_server::*;
 use super::proto::todo::v1::*;
 use super::schema;
 use crate::services::grpc_status;
-use crate::supabase_wrapper::utils::parse_response_query;
+use crate::supabase_wrapper::parse_response_query;
 use std::{convert::Infallible, sync::Arc};
 use supabase_rust::Supabase;
 use tonic::codegen::{http::HeaderName, CompressionEncoding};

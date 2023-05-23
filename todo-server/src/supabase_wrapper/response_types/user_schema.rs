@@ -1,6 +1,8 @@
-/// Schema describing the user related to the issued access and refresh tokens.
+/// Schema describing the user related to the issued access and refresh tokens
+/// as outlined in https://github.com/supabase/gotrue/blob/master/openapi.yaml
+///
 #[derive(serde::Deserialize)]
-pub struct User {
+pub struct SupabaseUser {
     /// format: uuid
     pub id: String,
 
@@ -62,9 +64,10 @@ pub struct User {
     pub deleted_at: Option<String>,
 
     pub app_metadata: AppMetadata,
+
+    pub identities: Vec<Identity>,
     // Not implemented:
     // user_metadata
-    // identities
 }
 
 /// Represents a MFA factor.
@@ -89,4 +92,32 @@ pub struct MFAFactorSchema {
 pub struct AppMetadata {
     pub provider: String,
     pub providers: Vec<String>,
+}
+
+#[derive(serde::Deserialize)]
+pub struct Identity {
+    /// format: uuid
+    pub id: String,
+
+    /// format: uuid
+    pub user_id: String,
+
+    pub identity_data: IdentityData,
+
+    pub provider: String,
+
+    /// format: date-time
+    pub last_sign_in_at: String,
+
+    /// format: date-time
+    pub created_at: String,
+
+    /// format: date-time
+    pub updated_at: String,
+}
+
+#[derive(serde::Deserialize)]
+pub struct IdentityData {
+    pub email: String,
+    pub sub: String,
 }
